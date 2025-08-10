@@ -17,10 +17,10 @@ import json
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 try:
-    from llm_tourism_sim import load_data, TourismModel, ScenarioAwareTourismModel
-    from llm_tourism_sim.scenarios.scenario_manager import TourismScenario, ScenarioManager
-    from llm_tourism_sim.utils.data_loader import validate_personas_data, validate_hotspots_data
-    from llm_tourism_sim.utils.analysis import analyze_simulation_results
+    from data_loader import load_data, validate_personas_data, validate_hotspots_data
+    from tourism_model import TourismModel, ScenarioAwareTourismModel
+    from scenario_manager import TourismScenario, ScenarioManager
+    from analysis import analyze_simulation_results
     IMPORTS_AVAILABLE = True
 except ImportError as e:
     print(f"Warning: Import failed: {e}")

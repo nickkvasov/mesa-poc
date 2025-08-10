@@ -74,7 +74,7 @@ def analyze_simulation_results(model_data: pd.DataFrame,
         analysis["trend_analysis"] = trend_analysis
 
     # Generate recommendations
-    recommendations = generate_recommendations_from_analysis(analysis)
+    recommendations = generate_policy_recommendations(analysis)
     analysis["recommendations"] = recommendations
 
     return analysis

@@ -11,12 +11,13 @@ import numpy as np
 import pandas as pd
 from mesa import Model
 from mesa.space import MultiGrid
+from mesa.model import AgentSet
 from mesa.datacollection import DataCollector
 from typing import Dict, List, Optional, Any, Tuple
 
-from ..agents.tourist import Tourist, ScenarioAwareTourist
-from ..agents.hotspot import Hotspot, ScenarioAwareHotspot
-from ..scenarios.scenario_manager import TourismScenario
+from tourist import Tourist, ScenarioAwareTourist
+from hotspot import Hotspot, ScenarioAwareHotspot
+from scenario_manager import TourismScenario
 
 
 class TourismModel(Model):
@@ -69,6 +70,7 @@ class TourismModel(Model):
         # Agent collections
         self.tourists = []
         self.hotspots = []
+        self.agent_set = AgentSet([], random=self.random)
 
         # Data collection
         self._setup_data_collection()
@@ -107,6 +109,7 @@ class TourismModel(Model):
         for hotspot_data in self.hotspots_data:
             hotspot = Hotspot(self, hotspot_data)
             self.hotspots.append(hotspot)
+            self.agent_set.add(hotspot)
 
             # Place hotspot on grid
             location = hotspot_data.get("location", {})
@@ -129,6 +132,7 @@ class TourismModel(Model):
             persona_data = random.choice(self.personas_data)
             tourist = Tourist(self, persona_data)
             self.tourists.append(tourist)
+            self.agent_set.add(tourist)
 
             # Place tourist randomly on grid
             x = random.randrange(self.grid.width)
@@ -140,8 +144,7 @@ class TourismModel(Model):
         self.datacollector.collect(self)
 
         # Step all agents
-        for agent in self.agents:
-            agent.step()
+        self.agent_set.do("step")
 
         self.current_step += 1
 

@@ -11,7 +11,9 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from llm_tourism_sim import load_data, TourismModel
+from data_loader import load_data
+from tourism_model import TourismModel
+from results_storage import ResultsStorage
 import pandas as pd
 
 
@@ -84,9 +86,33 @@ def run_basic_simulation():
         print(f"   Avg Visits: {stats['avg_visits']:.1f}")
         print()
 
-    # Save results
-    print("💾 Saving results...")
-    results.to_csv('basic_simulation_results.csv', index=False)
+    # Initialize results storage
+    storage = ResultsStorage()
+    
+    # Save comprehensive results
+    print("💾 Saving results to timestamped directory...")
+    saved_files = storage.save_simulation_results(
+        model_data=results,
+        agent_data=model.get_agent_data(),
+        hotspot_stats=model.get_hotspot_statistics(),
+        persona_stats=model.get_persona_statistics(),
+        simulation_config={
+            "num_tourists": model.num_tourists,
+            "num_hotspots": len(model.hotspots),
+            "grid_size": f"{model.grid.width}x{model.grid.height}",
+            "random_seed": 42,
+            "simulation_steps": 15
+        }
+    )
+    
+    # Create README for the output directory
+    simulation_info = {
+        "duration": "15 steps",
+        "steps": 15,
+        "num_tourists": model.num_tourists,
+        "num_hotspots": len(model.hotspots)
+    }
+    readme_path = storage.create_readme(simulation_info)
 
     # Create summary report
     summary = model.get_summary_report()
@@ -96,8 +122,10 @@ def run_basic_simulation():
     print(f"- {summary['configuration']['num_tourists']} tourists visited {summary['configuration']['num_hotspots']} hotspots")
     print(f"- Grid size: {summary['configuration']['grid_size']}")
 
-    print("\n✅ Basic simulation completed successfully!")
-    print("📁 Results saved to basic_simulation_results.csv")
+    print(f"\n✅ Basic simulation completed successfully!")
+    print(f"📁 Results saved to: {storage.get_output_directory()}")
+    print(f"📄 README created at: {readme_path}")
+    print(f"🕐 Timestamp: {storage.get_timestamp()}")
 
 
 if __name__ == "__main__":

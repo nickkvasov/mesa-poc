@@ -11,8 +11,10 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from llm_tourism_sim import load_data, ScenarioAwareTourismModel
-from llm_tourism_sim.scenarios.scenario_manager import ScenarioManager
+from data_loader import load_data
+from tourism_model import ScenarioAwareTourismModel
+from scenario_manager import ScenarioManager
+from results_storage import ResultsStorage
 import pandas as pd
 
 
@@ -170,10 +172,6 @@ def run_scenario_comparison():
         satisfaction = result['final_metrics']['average_satisfaction']
         print(f"  {i}. {result['scenario_name']}: {satisfaction:.3f}")
 
-    # Save results
-    print("\n💾 Saving comparison results...")
-    comparison_df.to_csv('scenario_comparison_results.csv', index=False)
-
     # Generate insights
     print("\n🔍 KEY INSIGHTS:")
     print("-" * 20)
@@ -199,8 +197,69 @@ def run_scenario_comparison():
         print(f"⚠️  Avoid conditions similar to '{worst_scenario['scenario_name']}'")
         print(f"   Could reduce satisfaction by {((baseline_metrics['average_satisfaction'] - worst_scenario['final_metrics']['average_satisfaction']) / baseline_metrics['average_satisfaction'] * 100):.1f}%")
 
-    print("\n✅ Scenario comparison completed successfully!")
-    print("📁 Results saved to scenario_comparison_results.csv")
+    # Initialize results storage
+    storage = ResultsStorage()
+    
+    # Prepare data for storage (only serializable data)
+    baseline_results = {
+        "scenario_name": "Baseline",
+        "final_metrics": baseline_summary['final_metrics'],
+        "summary": {
+            "simulation_steps": baseline_summary.get('simulation_steps', 0),
+            "configuration": baseline_summary.get('configuration', {}),
+            "final_metrics": baseline_summary.get('final_metrics', {})
+        }
+    }
+    
+    # Create serializable scenario results (remove model objects)
+    serializable_scenario_results = []
+    for result in scenario_results:
+        serializable_result = {
+            'scenario_name': result['scenario_name'],
+            'final_metrics': result['final_metrics'],
+            'summary': {
+                "simulation_steps": result['summary'].get('simulation_steps', 0),
+                "configuration": result['summary'].get('configuration', {}),
+                "final_metrics": result['summary'].get('final_metrics', {})
+            }
+        }
+        serializable_scenario_results.append(serializable_result)
+    
+    # Save comprehensive scenario comparison results
+    print("\n💾 Saving comparison results to timestamped directory...")
+    saved_files = storage.save_scenario_comparison(
+        baseline_results=baseline_results,
+        scenario_results=serializable_scenario_results,
+        comparison_analysis={
+            "best_scenario": best_scenario['scenario_name'],
+            "worst_scenario": worst_scenario['scenario_name'],
+            "impact_analysis": comparison_data,
+            "recommendations": {
+                "best_scenario": best_scenario['scenario_name'],
+                "worst_scenario": worst_scenario['scenario_name']
+            }
+        }
+    )
+    
+    # Save comparison table as CSV
+    comparison_csv_path = storage.output_dir / "data" / "comparison_table.csv"
+    comparison_df.to_csv(comparison_csv_path, index=False)
+    saved_files["comparison_table"] = str(comparison_csv_path)
+    
+    # Create README for the output directory
+    simulation_info = {
+        "duration": f"{len(scenarios)} scenarios",
+        "steps": 20,
+        "num_tourists": 50,
+        "num_hotspots": len(hotspots),
+        "scenarios_tested": [s.name for s in scenarios]
+    }
+    readme_path = storage.create_readme(simulation_info)
+
+    print(f"\n✅ Scenario comparison completed successfully!")
+    print(f"📁 Results saved to: {storage.get_output_directory()}")
+    print(f"📄 README created at: {readme_path}")
+    print(f"🕐 Timestamp: {storage.get_timestamp()}")
 
 
 if __name__ == "__main__":

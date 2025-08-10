@@ -241,6 +241,7 @@ $RECYCLE.BIN/
 data/
 results/
 output/
+outputs/
 *.csv
 *.json
 !tourist_personas.json

@@ -192,7 +192,7 @@ class Tourist(Agent):
                         "hotspot_id": self.current_hotspot,
                         "strength": strength,
                         "from_persona": self.persona_type,
-                        "step": self.model.schedule.steps if hasattr(self.model.schedule, 'steps') else 0
+                        "step": self.model.current_step
                     })
 
     def reset_daily_counters(self):
