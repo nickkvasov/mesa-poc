@@ -1,0 +1,63 @@
+{
+  "system_metadata": {
+    "name": "LLM-Enhanced Tourism Simulation System",
+    "version": "1.0",
+    "created_date": "2025-08-10",
+    "description": "Complete agent-based tourism simulation with LLM-generated content",
+    "technology_stack": [
+      "Mesa 3.2.0",
+      "Python",
+      "LLM-generated content"
+    ],
+    "license": "MIT"
+  },
+  "asset_files": {
+    "tourist_personas": {
+      "filename": "tourist_personas.json",
+      "description": "LLM-generated tourist personas with behavioral profiles",
+      "record_count": 5
+    },
+    "urban_hotspots": {
+      "filename": "urban_hotspots.json",
+      "description": "LLM-generated urban tourism destinations",
+      "record_count": 7
+    },
+    "business_rules": {
+      "filename": "business_rules.json",
+      "description": "LLM-generated behavioral rules",
+      "rule_categories": 2
+    },
+    "scenarios_events": {
+      "filename": "scenarios_events.json",
+      "description": "LLM-generated what-if scenarios",
+      "scenario_count": 3
+    }
+  },
+  "simulation_configuration": {
+    "default_parameters": {
+      "grid_size": {
+        "width": 20,
+        "height": 20
+      },
+      "default_tourist_count": 50,
+      "simulation_steps": 15,
+      "random_seed": 42
+    },
+    "persona_distribution": {
+      "Budget Backpacker": 0.3,
+      "Luxury Tourist": 0.2,
+      "Cultural Explorer": 0.16,
+      "Adventure Seeker": 0.14,
+      "Family Traveler": 0.2
+    }
+  },
+  "technical_requirements": {
+    "python_version": ">=3.8",
+    "required_packages": [
+      "mesa>=3.0",
+      "pandas",
+      "numpy",
+      "matplotlib"
+    ]
+  }
+}

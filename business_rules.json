@@ -1,0 +1,73 @@
+{
+  "metadata": {
+    "version": "1.0",
+    "generated_by": "LLM Tourism Simulation System",
+    "description": "LLM-generated business rules governing agent behavior and social dynamics",
+    "generation_date": "2025-08-10"
+  },
+  "recommendation_mechanics": {
+    "description": "Core mechanics governing how recommendations spread and popularity evolves",
+    "social_media_boost": {
+      "value": 0.1,
+      "description": "Popularity increase per satisfied tourist social media share",
+      "reasoning": "Modern tourists heavily influence destination popularity through social sharing"
+    },
+    "word_of_mouth_range": {
+      "value": 3,
+      "description": "Grid cell radius for direct tourist-to-tourist recommendations",
+      "reasoning": "Physical proximity enables face-to-face recommendations with higher trust"
+    },
+    "viral_threshold": {
+      "value": 0.8,
+      "description": "Popularity threshold above which viral amplification effects occur",
+      "reasoning": "Destinations reaching critical mass experience self-reinforcing popularity growth"
+    },
+    "decay_rate": {
+      "value": 0.02,
+      "description": "Daily popularity decay rate without fresh visitor activity",
+      "reasoning": "Destination popularity naturally fades without continuous positive reinforcement"
+    },
+    "capacity_penalty": {
+      "value": 0.5,
+      "description": "Popularity reduction multiplier when destination exceeds capacity",
+      "reasoning": "Overcrowding significantly reduces visitor satisfaction and future recommendations"
+    }
+  },
+  "persona_interaction_rules": {
+    "Budget Backpacker": {
+      "sharing_probability": 0.8,
+      "influence_on_similar": 0.7,
+      "influence_on_different": 0.3,
+      "movement_speed": 2,
+      "daily_visits": 3
+    },
+    "Luxury Tourist": {
+      "sharing_probability": 0.4,
+      "influence_on_similar": 0.8,
+      "influence_on_different": 0.2,
+      "movement_speed": 1,
+      "daily_visits": 2
+    },
+    "Cultural Explorer": {
+      "sharing_probability": 0.6,
+      "influence_on_similar": 0.9,
+      "influence_on_different": 0.4,
+      "movement_speed": 1,
+      "daily_visits": 4
+    },
+    "Adventure Seeker": {
+      "sharing_probability": 0.9,
+      "influence_on_similar": 0.8,
+      "influence_on_different": 0.5,
+      "movement_speed": 3,
+      "daily_visits": 2
+    },
+    "Family Traveler": {
+      "sharing_probability": 0.7,
+      "influence_on_similar": 0.8,
+      "influence_on_different": 0.6,
+      "movement_speed": 1,
+      "daily_visits": 3
+    }
+  }
+}
