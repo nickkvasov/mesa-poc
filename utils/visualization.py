@@ -456,7 +456,7 @@ def save_all_charts(results: Dict[str, Any], output_dir: str = "charts"):
 
         # Hotspot map
         if hotspot_stats:
-            popularity_dict = {h['Name']: h['Current_Popularity'] for h in hotspot_stats}
+            popularity_dict = {h['name']: h['current_popularity'] for h in hotspot_stats}
             # Would need hotspot location data for this chart
 
         print(f"Charts saved to {output_dir}/")

@@ -21,7 +21,7 @@ A sophisticated **agent-based tourism simulation system** enhanced with Large La
 - **Comparative Scenario Testing** with statistical significance analysis
 
 ### 📊 **Professional Analysis Tools**
-- **Comprehensive Visualization Suite** with time series, heatmaps, and comparison charts
+- **Comprehensive Visualization Suite** with static charts (Matplotlib/Seaborn) and interactive charts (Plotly)
 - **Policy Recommendation Engine** generating evidence-based insights
 - **Statistical Analysis** with trend detection and performance metrics
 - **Timestamped Results Storage** with organized output directories and automatic documentation
@@ -124,8 +124,23 @@ impact_summary = model.get_scenario_impact_summary()
 # Run basic simulation
 python examples/basic_simulation.py
 
+# Run basic simulation with visualization
+python examples/basic_simulation_with_visualization.py
+
+# Run comprehensive visualization demo
+python examples/visualization_demo.py
+
+# Run interactive visualization demo
+python examples/interactive_visualization.py
+
 # Run scenario comparison
 python examples/scenario_comparison.py
+
+# Run comprehensive scenario comparison
+python examples/comprehensive_scenario_comparison.py
+
+# Run easy scenario comparison
+python examples/easy_scenario_comparison.py
 
 # List and manage output directories
 python utils/list_outputs.py list
@@ -136,21 +151,70 @@ python utils/list_outputs.py explore
 
 
 
-## 🎭 Available Scenarios
+## 🎭 Scenario Comparison System
 
-### 1. **Summer Music Festival** (Event-Driven)
+The project includes a comprehensive scenario comparison system that allows you to easily create and compare multiple distinctive scenarios with different effects and intensities.
+
+### Quick Start
+
+```python
+from utils.scenario_builder import create_quick_comparison_set, quick_compare_scenarios
+
+# Create a set of scenarios for comparison
+scenarios = create_quick_comparison_set()
+
+# Run simulations and generate comparison
+from utils import ResultsStorage
+
+storage = ResultsStorage()
+output_dir = storage.get_output_directory()
+results = run_scenarios(scenarios)
+comparison_files = quick_compare_scenarios(results, f"{output_dir}/my_comparison")
+```
+
+### Available Scenario Types
+
+#### 1. **Marketing Scenarios** (Intensity: low, medium, high, aggressive)
+- **Effects**: Appeal boosts, social media buzz, event excitement
+- **Example**: Aggressive marketing campaign with +80% satisfaction increase
+
+#### 2. **Festival Scenarios** (Scale: small, medium, large, major)
+- **Effects**: Capacity boosts, appeal increases, spillover effects
+- **Example**: Major festival with 3x capacity and +100% appeal boost
+
+#### 3. **Construction Scenarios** (Severity: light, medium, heavy, severe)
+- **Effects**: Appeal penalties, inconvenience tolerance, noise tolerance
+- **Example**: Severe construction with -80% satisfaction impact
+
+#### 4. **Policy Scenarios** (Types: tax, regulation, subsidy, ban)
+- **Effects**: Targeted appeal changes, cost sensitivity, event excitement
+- **Example**: Luxury tax with -40% appeal penalty for high-end services
+
+### Example Results
+
+```
+Scenario              Popularity  Satisfaction  Change
+Baseline              0.720       0.624         -
+Aggressive Marketing  0.799       0.968         +55%
+Construction Disrupt  0.341       0.000         -100%
+Luxury Tax           0.658       0.454         -27%
+```
+
+### Available Scenarios
+
+#### 1. **Summer Music Festival** (Event-Driven)
 - **Objective**: Test impact of major cultural events on tourism
 - **Effects**: Capacity boost at Riverside Park, increased appeal to young demographics
 - **Expected Impact**: +40-60% satisfaction, enhanced social sharing
 - **Policy Applications**: Festival planning, event infrastructure investment
 
-### 2. **Luxury Tourism Tax** (Policy-Based)
+#### 2. **Luxury Tourism Tax** (Policy-Based)
 - **Objective**: Assess redistribution effects of luxury taxation
 - **Effects**: 15% tax on luxury services, capacity limits on high-end venues
 - **Expected Impact**: Tourist redistribution to alternative venues
 - **Policy Applications**: Sustainable tourism regulation, revenue generation
 
-### 3. **Downtown Construction** (Infrastructure)
+#### 3. **Downtown Construction** (Infrastructure)
 - **Objective**: Measure disruption impact of major infrastructure projects
 - **Effects**: Accessibility penalties, noise pollution, post-completion improvements
 - **Expected Impact**: -50-80% satisfaction during construction
@@ -220,13 +284,19 @@ python list_outputs.py explore 20250810_214805
 - **Policy Effectiveness Studies**: Quantify intervention impacts with statistical rigor
 - **Urban Systems Modeling**: Integrate tourism with broader city dynamics
 
-## 📊 Analysis Capabilities
+## 📊 Analysis & Visualization Capabilities
 
 ### **Performance Metrics**
 - **Satisfaction Analysis**: Multi-dimensional tourist satisfaction tracking
 - **Popularity Dynamics**: Hotspot performance and viral growth patterns
 - **Visitor Flow Analysis**: Spatial and temporal movement patterns
 - **Social Influence Networks**: Recommendation cascades and peer effects
+
+### **Visualization Suite**
+- **Static Charts**: Popularity evolution, satisfaction by persona, time series dashboards
+- **Interactive Charts**: Plotly-based charts with hover, zoom, and selection capabilities
+- **Comparison Charts**: Scenario performance comparisons and impact heatmaps
+- **Geographic Maps**: Hotspot location visualization with popularity indicators
 
 ### **Comparative Analysis**
 - **Scenario vs Baseline**: Statistical comparison of policy interventions
@@ -269,6 +339,19 @@ from analysis import analyze_simulation_results
 # Perform detailed analysis
 analysis = analyze_simulation_results(model_data, hotspot_stats, persona_stats)
 recommendations = analysis['recommendations']
+```
+
+### **Quick Visualization**
+```python
+from utils import add_visualization_to_existing_simulation
+
+# Add visualization to any simulation
+visualization_files = add_visualization_to_existing_simulation(
+    model_data=results,
+    hotspot_stats=model.get_hotspot_statistics(),
+    persona_stats=model.get_persona_statistics(),
+    output_dir="my_visualization"
+)
 ```
 
 ## 📈 Performance & Validation
