@@ -11,9 +11,8 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from llm_tourism_sim import load_data, ScenarioAwareTourismModel, analyze_simulation_results
-from llm_tourism_sim.scenarios.scenario_manager import TourismScenario, ScenarioManager
-from llm_tourism_sim.utils.analysis import compare_scenarios, generate_policy_recommendations
+from sim import load_data, ScenarioAwareTourismModel, TourismScenario, ScenarioManager
+from utils import analyze_simulation_results
 import pandas as pd
 
 

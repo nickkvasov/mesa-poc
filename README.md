@@ -24,7 +24,7 @@ A sophisticated **agent-based tourism simulation system** enhanced with Large La
 - **Comprehensive Visualization Suite** with time series, heatmaps, and comparison charts
 - **Policy Recommendation Engine** generating evidence-based insights
 - **Statistical Analysis** with trend detection and performance metrics
-- **Export Capabilities** for reports, data, and visualizations
+- **Timestamped Results Storage** with organized output directories and automatic documentation
 
 ## 🚀 Quick Start
 
@@ -32,20 +32,44 @@ A sophisticated **agent-based tourism simulation system** enhanced with Large La
 
 ```bash
 # Clone the repository
-git clone https://github.com/llm-tourism-sim/llm-tourism-sim.git
+git clone https://github.com/nickkvasov/mesa-poc.git
 cd llm-tourism-sim
 
-# Install the package
-pip install -e .
+# Create virtual environment
+python -m venv .venv
+source .venv/bin/activate  # On Windows: .venv\Scripts\activate
 
-# Or install with development dependencies
-pip install -e .[dev,examples]
+# Install dependencies
+pip install -r requirements.txt
+```
+
+### Project Structure
+
+```
+mesa-poc/
+├── data/                    # Configuration data files
+│   ├── tourist_personas.json
+│   ├── urban_hotspots.json
+│   ├── business_rules.json
+│   └── scenarios_events.json
+├── sim/                     # Core simulation modules
+│   ├── models/             # Simulation models
+│   ├── agents/             # Tourist and hotspot agents
+│   └── data_loader.py      # Data loading utilities
+├── utils/                   # Analysis and utility modules
+│   ├── analysis.py         # Statistical analysis
+│   ├── visualization.py    # Charts and plots
+│   └── results_storage.py  # Results management
+├── examples/                # Example scripts
+├── tests/                   # Test suite
+└── docs/                    # Documentation
 ```
 
 ### Basic Usage
 
 ```python
-from llm_tourism_sim import load_data, TourismModel
+from sim import load_data, TourismModel
+from utils import ResultsStorage
 
 # Load LLM-generated configuration
 personas, hotspots, business_rules, scenarios = load_data()
@@ -61,19 +85,25 @@ model = TourismModel(
 # Run simulation for 20 steps
 results = model.run_simulation(steps=20)
 
-# Get comprehensive analysis
-summary = model.get_summary_report()
-print(f"Final satisfaction: {summary['final_metrics']['average_satisfaction']:.3f}")
+# Save results to timestamped directory
+storage = ResultsStorage()
+saved_files = storage.save_simulation_results(
+    model_data=results,
+    agent_data=model.get_agent_data(),
+    hotspot_stats=model.get_hotspot_statistics(),
+    persona_stats=model.get_persona_statistics()
+)
+
+print(f"Results saved to: {storage.get_output_directory()}")
 ```
 
 ### Scenario Testing
 
 ```python
-from llm_tourism_sim import ScenarioAwareTourismModel
-from llm_tourism_sim.scenarios.scenario_manager import ScenarioManager
+from sim import ScenarioAwareTourismModel, ScenarioManager
 
 # Load scenarios
-scenario_manager = ScenarioManager("llm_tourism_sim/data/scenarios_events.json")
+scenario_manager = ScenarioManager("scenarios_events.json")
 festival_scenario = scenario_manager.get_scenario("Summer Music Festival")
 
 # Test scenario impact
@@ -88,22 +118,23 @@ results = model.run_simulation(steps=20)
 impact_summary = model.get_scenario_impact_summary()
 ```
 
-## 📁 Project Structure
+### Command Line Examples
 
+```bash
+# Run basic simulation
+python examples/basic_simulation.py
+
+# Run scenario comparison
+python examples/scenario_comparison.py
+
+# List and manage output directories
+python utils/list_outputs.py list
+python utils/list_outputs.py latest
+python utils/list_outputs.py explore
 ```
-llm_tourism_sim/
-├── llm_tourism_sim/          # Main package
-│   ├── agents/               # Tourist and hotspot agent classes
-│   ├── models/               # Simulation model classes
-│   ├── scenarios/            # Scenario management system
-│   ├── utils/                # Data loading, visualization, analysis
-│   └── data/                 # LLM-generated JSON configuration files
-├── examples/                 # Example scripts and tutorials
-├── tests/                    # Unit tests
-├── docs/                     # Documentation
-├── setup.py                  # Package installation configuration
-└── requirements.txt          # Dependencies
-```
+
+
+
 
 ## 🎭 Available Scenarios
 
@@ -134,6 +165,40 @@ llm_tourism_sim/
 | **Cultural Explorer** | Medium | Learning-oriented, authentic experiences | Museums, historical sites, art galleries |
 | **Adventure Seeker** | Medium | Risk-tolerant, physically active | Outdoor activities, extreme sports, nature |
 | **Family Traveler** | Medium | Safety-conscious, convenience-seeking | Family activities, parks, safe attractions |
+
+## 📊 Results Storage & Management
+
+### Timestamped Output Directories
+Each simulation run creates a unique timestamped directory with organized structure:
+
+```
+outputs/20250810_214805/
+├── README.md                    # Simulation documentation
+├── metadata.json               # Simulation metadata
+├── data/                       # Raw simulation data
+│   ├── model_data.csv         # Time series data
+│   ├── agent_data.csv         # Agent-level statistics
+│   ├── hotspot_stats.json     # Hotspot performance
+│   └── persona_stats.json     # Persona statistics
+├── charts/                     # Generated visualizations
+├── reports/                    # Analysis reports
+└── configs/                    # Simulation configurations
+```
+
+### Output Management Commands
+```bash
+# List all simulation outputs
+python utils/list_outputs.py list
+
+# Show latest output information
+python utils/list_outputs.py latest
+
+# Explore output directory contents
+python utils/list_outputs.py explore
+
+# Explore specific output
+python list_outputs.py explore 20250810_214805
+```
 
 ## 🎯 Use Cases
 
@@ -184,7 +249,7 @@ new_persona = {
 
 ### **Custom Scenarios**
 ```python
-from llm_tourism_sim.scenarios.scenario_manager import TourismScenario
+from scenario_manager import TourismScenario
 
 # Create custom policy scenario
 scenario = TourismScenario(
@@ -199,7 +264,7 @@ scenario.add_event(5, "appeal_boost", "Art Gallery District",
 
 ### **Custom Analysis**
 ```python
-from llm_tourism_sim.utils.analysis import analyze_simulation_results
+from analysis import analyze_simulation_results
 
 # Perform detailed analysis
 analysis = analyze_simulation_results(model_data, hotspot_stats, persona_stats)
@@ -222,7 +287,7 @@ recommendations = analysis['recommendations']
 
 ## 🤝 Contributing
 
-We welcome contributions! Please see our [Contributing Guidelines](docs/CONTRIBUTING.md) for details on:
+We welcome contributions! Please see our [Contributing Guidelines](CONTRIBUTING.md) for details on:
 
 - **Code Standards**: Python style guide, testing requirements, documentation
 - **Development Setup**: Environment configuration, development dependencies
@@ -242,7 +307,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## 📞 Contact & Support
 
-- **Documentation**: [Read the Docs](https://llm-tourism-sim.readthedocs.io/)
+- **Documentation**: [API Reference](API.md), [Usage Guide](USAGE.md)
 - **Issues**: [GitHub Issues](https://github.com/llm-tourism-sim/llm-tourism-sim/issues)
 - **Discussions**: [GitHub Discussions](https://github.com/llm-tourism-sim/llm-tourism-sim/discussions)
 - **Email**: contact@llm-tourism-sim.org

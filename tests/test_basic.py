@@ -17,17 +17,26 @@ import json
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..'))
 
 try:
-    from data_loader import load_data, validate_personas_data, validate_hotspots_data
-    from tourism_model import TourismModel, ScenarioAwareTourismModel
-    from scenario_manager import TourismScenario, ScenarioManager
-    from analysis import analyze_simulation_results
-    IMPORTS_AVAILABLE = True
+    # Import validation functions (should work without numpy)
+    from sim import validate_personas_data, validate_hotspots_data, load_data
+    VALIDATION_AVAILABLE = True
 except ImportError as e:
-    print(f"Warning: Import failed: {e}")
-    IMPORTS_AVAILABLE = False
+    print(f"Warning: Validation imports failed: {e}")
+    VALIDATION_AVAILABLE = False
+
+try:
+    # Import heavy modules (may fail without numpy)
+    from sim import TourismModel, ScenarioAwareTourismModel, TourismScenario, ScenarioManager
+    from utils import analyze_simulation_results
+    HEAVY_IMPORTS_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Heavy imports failed: {e}")
+    HEAVY_IMPORTS_AVAILABLE = False
+
+IMPORTS_AVAILABLE = VALIDATION_AVAILABLE or HEAVY_IMPORTS_AVAILABLE
 
 
-@unittest.skipUnless(IMPORTS_AVAILABLE, "Package imports not available")
+@unittest.skipUnless(VALIDATION_AVAILABLE, "Validation functions not available")
 class TestDataLoading(unittest.TestCase):
     """Test data loading functionality."""
 
@@ -62,7 +71,7 @@ class TestDataLoading(unittest.TestCase):
             self.fail(f"Data validation failed: {e}")
 
 
-@unittest.skipUnless(IMPORTS_AVAILABLE, "Package imports not available")
+@unittest.skipUnless(HEAVY_IMPORTS_AVAILABLE, "Heavy imports not available")
 class TestBasicSimulation(unittest.TestCase):
     """Test basic simulation functionality."""
 
@@ -128,7 +137,7 @@ class TestBasicSimulation(unittest.TestCase):
         self.assertIn('final_metrics', summary)
 
 
-@unittest.skipUnless(IMPORTS_AVAILABLE, "Package imports not available")
+@unittest.skipUnless(HEAVY_IMPORTS_AVAILABLE, "Heavy imports not available")
 class TestScenarioSystem(unittest.TestCase):
     """Test scenario management and execution."""
 
@@ -166,7 +175,7 @@ class TestScenarioSystem(unittest.TestCase):
         self.assertIn("Test", scenarios)
 
 
-@unittest.skipUnless(IMPORTS_AVAILABLE, "Package imports not available")  
+@unittest.skipUnless(HEAVY_IMPORTS_AVAILABLE, "Heavy imports not available")  
 class TestAnalysis(unittest.TestCase):
     """Test analysis and visualization functionality."""
 

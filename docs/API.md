@@ -2,6 +2,42 @@
 
 Complete API documentation for the LLM Tourism Simulation System.
 
+## Project Structure
+
+The project is organized into logical packages for better maintainability:
+
+```
+mesa-poc/
+├── data/                    # Configuration data files
+│   ├── tourist_personas.json
+│   ├── urban_hotspots.json
+│   ├── business_rules.json
+│   └── scenarios_events.json
+├── sim/                     # Core simulation modules
+│   ├── models/             # Simulation models
+│   ├── agents/             # Tourist and hotspot agents
+│   └── data_loader.py      # Data loading utilities
+├── utils/                   # Analysis and utility modules
+│   ├── analysis.py         # Statistical analysis
+│   ├── visualization.py    # Charts and plots
+│   └── results_storage.py  # Results management
+├── examples/                # Example scripts
+├── tests/                   # Test suite
+└── docs/                    # Documentation
+```
+
+### Import Patterns
+
+```python
+# New recommended imports
+from sim import TourismModel, load_data, validate_personas_data
+from utils import ResultsStorage, analyze_simulation_results
+
+# Legacy imports (still supported)
+from tourism_model import TourismModel
+from data_loader import load_data
+```
+
 ## Core Classes
 
 ### TourismModel
@@ -27,6 +63,8 @@ class TourismModel(Model):
 - `get_hotspot_statistics()`: Get detailed hotspot metrics
 - `get_persona_statistics()`: Get persona-grouped statistics  
 - `get_summary_report()`: Generate comprehensive analysis report
+- `get_model_data()`: Get time series data from datacollector
+- `get_agent_data()`: Get agent-level data from datacollector
 
 ### ScenarioAwareTourismModel
 
@@ -119,6 +157,36 @@ class ScenarioManager:
 - `create_scenario(name, description)`: Create new custom scenario
 - `compare_scenarios(names)`: Compare multiple scenarios
 
+## Results Storage
+
+### ResultsStorage
+
+Manages storage of simulation results in timestamped directories.
+
+```python
+class ResultsStorage:
+    def __init__(self, base_output_dir="outputs")
+```
+
+**Methods:**
+- `save_simulation_results(model_data, agent_data=None, hotspot_stats=None, persona_stats=None, simulation_config=None)`: Save comprehensive simulation results
+- `save_scenario_comparison(baseline_results, scenario_results, comparison_analysis)`: Save scenario comparison results
+- `save_charts(charts_data)`: Save generated visualizations
+- `save_model_state(model, filename)`: Save complete model state
+- `create_readme(simulation_info)`: Create README for output directory
+- `get_output_directory()`: Get current output directory path
+- `get_timestamp()`: Get current timestamp string
+
+### Utility Functions
+
+```python
+# Get latest output directory
+latest_dir = get_latest_output_dir(base_output_dir="outputs")
+
+# List all output directories
+outputs = list_output_directories(base_output_dir="outputs")
+```
+
 ## Utility Functions
 
 ### Data Loading
@@ -132,6 +200,10 @@ personas = load_personas(file_path=None)
 hotspots = load_hotspots(file_path=None)  
 rules = load_business_rules(file_path=None)
 scenarios = load_scenarios(file_path=None)
+
+# Validate data
+is_valid = validate_personas_data(personas)
+is_valid = validate_hotspots_data(hotspots)
 ```
 
 ### Analysis Functions
@@ -248,6 +320,27 @@ fig = create_time_series_dashboard(model_data, title="Simulation Dashboard")
 }
 ```
 
+### Results Storage Structure
+
+```python
+# Output directory structure
+{
+    "timestamp": "20250810_214805",
+    "simulation_date": "2025-08-10T21:48:05.872631",
+    "files_saved": {
+        "model_data": "outputs/20250810_214805/data/model_data.csv",
+        "agent_data": "outputs/20250810_214805/data/agent_data.csv",
+        "hotspot_stats": "outputs/20250810_214805/data/hotspot_stats.json",
+        "persona_stats": "outputs/20250810_214805/data/persona_stats.json",
+        "metadata": "outputs/20250810_214805/metadata.json"
+    },
+    "model_steps": 15,
+    "total_agents": 555,
+    "hotspots_count": 7,
+    "personas_count": 5
+}
+```
+
 ## Event Types
 
 ### Hotspot Events
@@ -301,13 +394,20 @@ try:
     results = model.run_simulation(steps=20)
 except Exception as e:
     print(f"Simulation error: {e}")
+
+# Results storage errors
+try:
+    storage = ResultsStorage()
+    saved_files = storage.save_simulation_results(model_data=results)
+except PermissionError:
+    print("Permission denied - check write access to outputs directory")
 ```
 
 ### Validation Functions
 
 ```python
 # Validate data integrity
-from llm_tourism_sim.utils.data_loader import validate_personas_data, validate_hotspots_data
+from sim import validate_personas_data, validate_hotspots_data
 
 is_valid = validate_personas_data(personas)
 if not is_valid:
@@ -332,6 +432,12 @@ if not is_valid:
 - Data collection: +10% overhead
 - Typical simulation (50 tourists, 20 steps): ~2-5 seconds
 
+### Storage Requirements
+- Model data CSV: ~1KB per step
+- Agent data CSV: ~5KB per step
+- Statistics JSON: ~2KB per simulation
+- Total per simulation: ~100-500KB
+
 ### Optimization Tips
 ```python
 # For large simulations, disable some data collection
@@ -342,4 +448,42 @@ model = TourismModel(grid_width=10, grid_height=10)
 
 # Reduce social interaction range
 business_rules["recommendation_mechanics"]["word_of_mouth_range"] = 1
+
+# Use efficient results storage
+storage = ResultsStorage()
+storage.save_simulation_results(
+    model_data=results,
+    # Only save essential data for large simulations
+    agent_data=None,
+    simulation_config={"num_tourists": 100, "steps": 50}
+)
+```
+
+## Command Line Interface
+
+### Output Management Commands
+```bash
+# List all simulation outputs
+python utils/list_outputs.py list
+
+# Show latest output information
+python utils/list_outputs.py latest
+
+# Explore output directory contents
+python utils/list_outputs.py explore
+
+# Explore specific output directory
+python utils/list_outputs.py explore 20250810_214805
+```
+
+### Simulation Commands
+```bash
+# Run basic simulation
+python examples/basic_simulation.py
+
+# Run scenario comparison
+python examples/scenario_comparison.py
+
+# Run tests
+python tests/test_basic.py
 ```

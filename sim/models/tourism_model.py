@@ -15,9 +15,9 @@ from mesa.model import AgentSet
 from mesa.datacollection import DataCollector
 from typing import Dict, List, Optional, Any, Tuple
 
-from tourist import Tourist, ScenarioAwareTourist
-from hotspot import Hotspot, ScenarioAwareHotspot
-from scenario_manager import TourismScenario
+from ..agents.tourist import Tourist, ScenarioAwareTourist
+from ..agents.hotspot import Hotspot, ScenarioAwareHotspot
+from .scenario_manager import TourismScenario
 
 
 class TourismModel(Model):

@@ -8,7 +8,7 @@ This script provides utilities to list, explore, and manage simulation output di
 
 import sys
 import os
-from results_storage import list_output_directories, get_latest_output_dir
+from .results_storage import list_output_directories, get_latest_output_dir
 from pathlib import Path
 
 

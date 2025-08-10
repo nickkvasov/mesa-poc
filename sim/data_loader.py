@@ -13,7 +13,7 @@ from pathlib import Path
 
 
 # Default data directory relative to this module
-DEFAULT_DATA_DIR = Path(__file__).parent
+DEFAULT_DATA_DIR = Path(__file__).parent.parent / "data"
 
 
 def load_json_file(file_path: str) -> Dict[str, Any]:

@@ -13,16 +13,27 @@ Thank you for your interest in contributing! This document provides guidelines f
    cd llm-tourism-sim
    ```
 
-2. **Install Development Dependencies**
+2. **Create Virtual Environment**
    ```bash
-   pip install -e .[dev,examples,docs]
+   python -m venv .venv
+   source .venv/bin/activate  # On Windows: .venv\Scripts\activate
    ```
 
-3. **Run Tests**
+3. **Install Dependencies**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+4. **Install Development Tools (Optional)**
+   ```bash
+   pip install pytest black flake8
+   ```
+
+5. **Run Tests**
    ```bash
    python tests/test_basic.py
    # Or with pytest (if installed)
-   pytest tests/
+   pytest tests/test_basic.py
    ```
 
 ## 📋 Types of Contributions
@@ -48,6 +59,39 @@ Thank you for your interest in contributing! This document provides guidelines f
 - Follow coding standards and include tests
 - Update documentation as needed
 
+## 📁 Project Structure
+
+The project is organized into logical packages for better maintainability:
+
+```
+mesa-poc/
+├── data/                    # Configuration data files
+│   ├── tourist_personas.json
+│   ├── urban_hotspots.json
+│   ├── business_rules.json
+│   └── scenarios_events.json
+├── sim/                     # Core simulation modules
+│   ├── models/             # Simulation models
+│   ├── agents/             # Tourist and hotspot agents
+│   └── data_loader.py      # Data loading utilities
+├── utils/                   # Analysis and utility modules
+│   ├── analysis.py         # Statistical analysis
+│   ├── visualization.py    # Charts and plots
+│   └── results_storage.py  # Results management
+├── examples/                # Example scripts
+├── tests/                   # Test suite
+└── docs/                    # Documentation
+```
+
+### Where to Add New Code
+
+- **New simulation models**: `sim/models/`
+- **New agent types**: `sim/agents/`
+- **New analysis functions**: `utils/`
+- **New example scripts**: `examples/`
+- **New tests**: `tests/`
+- **New data files**: `data/`
+
 ## 🛠️ Development Guidelines
 
 ### Code Style
@@ -61,10 +105,10 @@ Thank you for your interest in contributing! This document provides guidelines f
 **Formatting Tools:**
 ```bash
 # Format code (if black is installed)
-black llm_tourism_sim/
+black .
 
 # Check style (if flake8 is installed)  
-flake8 llm_tourism_sim/
+flake8 .
 ```
 
 ### Testing Requirements
@@ -116,7 +160,7 @@ def new_function(param1: str, param2: int = 10) -> dict:
 ```
 
 **API Documentation:**
-- Update `docs/API.md` for new public functions
+- Update `API.md` for new public functions
 - Include examples and parameter descriptions
 - Document any breaking changes
 
@@ -136,7 +180,7 @@ def new_function(param1: str, param2: int = 10) -> dict:
    ```
 
 2. **Add to Configuration**
-   - Add to `llm_tourism_sim/data/tourist_personas.json`
+   - Add to `tourist_personas.json`
    - Update appeal scores in hotspot definitions
    - Add to business rules if needed
 
@@ -196,6 +240,18 @@ def new_function(param1: str, param2: int = 10) -> dict:
    - Include appropriate legends and labels
    - Test with different data sizes
 
+### Extending Results Storage
+
+1. **New Storage Formats**
+   - Add support for new file formats
+   - Include metadata and documentation
+   - Maintain backward compatibility
+
+2. **Output Management**
+   - Add new utility functions
+   - Improve directory organization
+   - Enhance search and filtering
+
 ## 📦 Pull Request Process
 
 ### Before Submitting
@@ -206,16 +262,22 @@ def new_function(param1: str, param2: int = 10) -> dict:
    python tests/test_basic.py
 
    # Check imports work
-   python -c "import llm_tourism_sim; print('✅ Import successful')"
+   python -c "from sim import TourismModel, load_data; print('✅ Import successful')"
 
    # Test examples
    python examples/basic_simulation.py
+   python examples/scenario_comparison.py
    ```
 
 2. **Documentation**
    - Update relevant documentation files
    - Add docstrings to new functions
    - Include examples for new features
+
+3. **Results Storage**
+   - Test with results storage system
+   - Verify output directory structure
+   - Check metadata generation
 
 ### Pull Request Template
 
@@ -228,21 +290,25 @@ Brief description of changes
 - [ ] New feature  
 - [ ] Documentation update
 - [ ] Performance improvement
+- [ ] Results storage enhancement
 
 ## Testing
 - [ ] Existing tests pass
 - [ ] New tests added for new functionality
 - [ ] Examples updated if needed
+- [ ] Results storage tested if applicable
 
 ## Documentation
 - [ ] Code includes docstrings
 - [ ] API documentation updated
 - [ ] README updated if needed
+- [ ] Usage examples updated
 
 ## Checklist
 - [ ] Code follows style guidelines
 - [ ] Self-review completed
 - [ ] No breaking changes (or clearly documented)
+- [ ] Virtual environment setup documented
 ```
 
 ### Review Process
@@ -256,6 +322,7 @@ Brief description of changes
    - Code quality and design
    - Documentation completeness
    - Test coverage
+   - Results storage integration
 
 3. **Approval**
    - At least one maintainer approval required
@@ -276,6 +343,7 @@ Brief description of changes
 - [ ] CHANGELOG.md updated
 - [ ] Version number bumped
 - [ ] Release notes prepared
+- [ ] Results storage system tested
 
 ## 🌟 Recognition
 
@@ -314,6 +382,7 @@ Your contributions help make this project better for everyone. Whether you're:
 - Improving documentation
 - Contributing code
 - Providing feedback
+- Enhancing results storage
 
 Every contribution is valuable and appreciated! 🙏
 

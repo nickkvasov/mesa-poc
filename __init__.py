@@ -35,14 +35,19 @@ __email__ = "contact@llm-tourism-sim.org"
 __license__ = "MIT"
 
 # Import main classes for easy access
-from tourism_model import TourismModel, ScenarioAwareTourismModel
-from tourist import Tourist, ScenarioAwareTourist
-from hotspot import Hotspot, ScenarioAwareHotspot
-from scenario_manager import ScenarioManager, TourismScenario
-from data_loader import load_data, load_personas, load_hotspots, load_business_rules, load_scenarios, validate_personas_data, validate_hotspots_data
-from visualization import create_popularity_chart, create_satisfaction_chart, create_scenario_comparison, plot_hotspot_map
-from analysis import analyze_simulation_results, compare_scenarios, generate_policy_recommendations, calculate_satisfaction_metrics
-from results_storage import ResultsStorage, get_latest_output_dir, list_output_directories
+from sim import (
+    TourismModel, ScenarioAwareTourismModel,
+    Tourist, ScenarioAwareTourist,
+    Hotspot, ScenarioAwareHotspot,
+    ScenarioManager, TourismScenario,
+    load_data, load_personas, load_hotspots, load_business_rules, load_scenarios,
+    validate_personas_data, validate_hotspots_data, validate_business_rules_data
+)
+from utils import (
+    analyze_simulation_results, compare_scenarios, generate_policy_recommendations,
+    create_popularity_chart, create_satisfaction_chart, create_scenario_comparison,
+    ResultsStorage, get_latest_output_dir, list_output_directories
+)
 
 # Main API functions
 __all__ = [
@@ -61,14 +66,13 @@ __all__ = [
     'load_scenarios',
     'validate_personas_data',
     'validate_hotspots_data',
+    'validate_business_rules_data',
     'create_popularity_chart',
     'create_satisfaction_chart',
     'create_scenario_comparison',
-    'plot_hotspot_map',
     'analyze_simulation_results',
     'compare_scenarios',
     'generate_policy_recommendations',
-    'calculate_satisfaction_metrics',
     'ResultsStorage',
     'get_latest_output_dir',
     'list_output_directories'

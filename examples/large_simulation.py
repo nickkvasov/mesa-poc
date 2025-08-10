@@ -1,27 +1,26 @@
 #!/usr/bin/env python3
 """
-Basic Tourism Simulation Example
-===============================
+Large Scale Tourism Simulation
+==============================
 
-This example demonstrates how to run a basic tourism simulation using
-the LLM-enhanced tourism simulation system.
+This script runs a large-scale tourism simulation with 5000 tourists
+using the LLM-enhanced tourism simulation system.
 """
 
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from data_loader import load_data
-from tourism_model import TourismModel
-from results_storage import ResultsStorage
+from sim import load_data, TourismModel
+from utils import ResultsStorage
 import pandas as pd
 
 
-def run_basic_simulation():
-    """Run a basic tourism simulation with LLM-generated data."""
+def run_large_simulation():
+    """Run a large-scale tourism simulation with 5000 tourists."""
 
-    print("🚀 LLM Tourism Simulation - Basic Example")
-    print("=" * 50)
+    print("🚀 LLM Tourism Simulation - Large Scale (5000 Tourists)")
+    print("=" * 60)
 
     # Load LLM-generated data
     print("📁 Loading LLM-generated configuration data...")
@@ -34,13 +33,13 @@ def run_basic_simulation():
         return
 
     # Create and configure model
-    print("\n🏗️ Creating tourism model...")
+    print("\n🏗️ Creating tourism model with 5000 tourists...")
     model = TourismModel(
         personas_data=personas,
         hotspots_data=hotspots,
         business_rules=business_rules,
-        num_tourists=30,  # Smaller number for example
-        random_seed=42    # For reproducible results
+        num_tourists=5000,  # Large number of tourists
+        random_seed=42      # For reproducible results
     )
 
     print(f"✅ Model created with {len(model.tourists)} tourists and {len(model.hotspots)} hotspots")
@@ -122,11 +121,11 @@ def run_basic_simulation():
     print(f"- {summary['configuration']['num_tourists']} tourists visited {summary['configuration']['num_hotspots']} hotspots")
     print(f"- Grid size: {summary['configuration']['grid_size']}")
 
-    print(f"\n✅ Basic simulation completed successfully!")
+    print(f"\n✅ Large-scale simulation completed successfully!")
     print(f"📁 Results saved to: {storage.get_output_directory()}")
     print(f"📄 README created at: {readme_path}")
     print(f"🕐 Timestamp: {storage.get_timestamp()}")
 
 
 if __name__ == "__main__":
-    run_basic_simulation()
+    run_large_simulation()

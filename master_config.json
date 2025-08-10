@@ -39,7 +39,7 @@
         "width": 20,
         "height": 20
       },
-      "default_tourist_count": 50,
+      "default_tourist_count": 5000,
       "simulation_steps": 15,
       "random_seed": 42
     },

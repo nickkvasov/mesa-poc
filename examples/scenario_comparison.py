@@ -11,10 +11,8 @@ import sys
 import os
 sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/..')
 
-from data_loader import load_data
-from tourism_model import ScenarioAwareTourismModel
-from scenario_manager import ScenarioManager
-from results_storage import ResultsStorage
+from sim import load_data, ScenarioAwareTourismModel, ScenarioManager
+from utils import ResultsStorage
 import pandas as pd
 
 
